@@ -24,17 +24,23 @@ exports.createPost = (req, res, next) => {
     throw error;
     // return res.status(422).json({message: "Validation Failed. Please enter Correct Data", errors: errors.array()})
   }
+
+  if (!req.file) {
+    const error = new Error('Image is not Found.');
+    error.statusCode = 422;
+    throw error;
+  }
+  const imageUrl = req.file.path;
   const title = req.body.title;
   const content = req.body.content;
   // Create post in db
-
   const post = new Post({
     title: title, 
     content: content,
     creator: {
       name: 'Srikanth'  
     },
-    imageUrl: 'images/hdp.jpg'
+    imageUrl: imageUrl
   });
 
   post.save()
@@ -63,11 +69,11 @@ exports.getPost = (req,res,post) => {
       }
       res.status(200).json({message: "Post fetched Successfully", post: post })
     })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
       }
-      next(err);
-    })
+      next(error);
+    });
 
 }
