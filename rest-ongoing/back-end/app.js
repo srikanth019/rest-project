@@ -21,6 +21,13 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes);
 
+app.use((error,req,res,next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    res.status(status).json({message: message});
+})
+
 mongoose.connect(
     'mongodb+srv://srikanth19:1858260338@cluster0.5sgelp9.mongodb.net/posts?retryWrites=true&w=majority'
 )
