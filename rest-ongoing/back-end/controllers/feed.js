@@ -190,6 +190,49 @@ exports.deletePost = (req,res,next) => {
     });
 }
 
+
+exports.getStatus = (req,res, next) => {
+  User
+    .findById(req.userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('Not Found any user');
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({status: user.status})
+    })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    })
+};
+
+exports.putStatus = (req, res,next) => {
+  const newStatus = req.body.status;
+  User.findById(req.userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('Not Found any user');
+        error.statusCode = 404;
+        throw error;
+      }
+      user.status = newStatus;
+      return user.save();
+    })
+    .then(result => {
+      res.status(200).json({message: "Status Updated Successfully"})
+    })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    })
+}
+
 const clearImage = (filePath) => {
   filePath = path.join(__dirname,'../', filePath);
   fs.unlink(filePath, err => console.log(err));
