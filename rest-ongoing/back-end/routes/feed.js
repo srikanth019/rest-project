@@ -14,8 +14,8 @@ router.post('/post',[
         .trim()
         .isLength({min: 5}),
     body('content')
-    .trim()
-    .isLength({min: 5})
+        .trim()
+        .isLength({min: 5})
 
 ], feedController.createPost);
 
