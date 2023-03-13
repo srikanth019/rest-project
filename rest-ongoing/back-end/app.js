@@ -59,9 +59,13 @@ mongoose.connect(
     'mongodb+srv://srikanth19:1858260338@cluster0.5sgelp9.mongodb.net/messages?retryWrites=true&w=majority'
 )
 .then(result => {
-    app.listen(8080, (req,res,next) => {
-        console.log("Server running");
+    app.listen(8080, () => {
+        console.log("Server Running")
     });
+    // const io = require('socket.io')(server);
+    // io.on('connection', socket => {
+    //   console.log('Client connected');
+    // });
 })
 .catch(err => {
     console.log(err);
